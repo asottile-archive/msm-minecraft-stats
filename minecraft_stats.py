@@ -46,6 +46,7 @@ SAVING_MESSAGES = [
 
 CANT_KEEP_UP_MESSAGE = "Can't keep up! Did the system time change, or is the server overloaded?"
 MOVED_WRONGLY_MESSAGE = ' moved wrongly!'
+FLOATING_TOO_LONG_MESSAGE = ' was kicked for floating too long!'
 
 Coordinate = namedtuple('Coordinate', ['x', 'y', 'z'])
 
@@ -86,6 +87,7 @@ class LogLine:
     # WARNING ones
     is_moved_wrongly = False
     is_cant_keep_up = False
+    is_floating_too_long = False
 
     # Defaults
     is_unknown = False
@@ -146,6 +148,10 @@ class LogLine:
                 self.user = self.message_text[:-1 * len(MOVED_WRONGLY_MESSAGE):]
             elif self.message_text == CANT_KEEP_UP_MESSAGE:
                 self.is_cant_keep_up = True
+            elif self.message_text.endswith(FLOATING_TOO_LONG_MESSAGE):
+                # Message is like '%player was kicked for floating too long!
+                self.is_floating_too_long = True
+                self.user = self.message_text[:-1 * len(FLOATING_TOO_LONG_MESSAGE):]
             else:
                 raise NotImplementedError('Unknown warning.')
 
